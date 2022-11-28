@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+/* let p = new Promise((resolve,rejct)=>{
+  // 触发catch，方式-通过reject
+  // reject(new Error('产生错误'))
+  // 触发catch，方式2-通过抛出一个错误
+  // throw new Error('产生错误')
+  // 触发catch，方式3-resolve一个promise
+  // resolve(new Promise(resolve2,reject2 => {reject2(new Error('产生错误'))}))
+  resolve(Promise.reject(new Error))
+1})
+p.then(data=>{
+
+}).catch(error=>{
+  console.log('error',error);
+}) */
+
+//应用promise的错误处理
+//页面当中方法
+async function handleLogin(){
+  try {
+    let token = await myLogin({mobile:'11',password:'666'})
+    console.log('登陆成功，token',token);
+  } catch (error) {
+    console.log('登陆失败',error);
+  }
+}
+//接口当中方法
+function myLogin(data){
+  return request({
+    url:'/sys/login',
+    method:'post',
+    data
+  })
+}
+//axios的封装
+function request(){
+return new Promise((resolve,reject) => {
+  setTimeout(() => {
+    // 通过ajax发请求获取数据
+    // 服务器返回成功数据
+    let response = {success:true,data:'abcd'}
+    // 服务器返回失败数据
+    // let response = {success:false,data:null}
+    resolve(interceptorsResponse(response))
+  }, 0);
+})
+}
+//axios的响应拦截器
+function interceptorsResponse(response){
+let {success,data} = response
+if(!success){
+  console.log('提示失败');
+  // throw new Error('产生错误') // 抛出错误
+
+  return Promise.reject(new Error('产生错误'))
+}else{
+  return data
+}
+}
+handleLogin()
+</script>
+</html>

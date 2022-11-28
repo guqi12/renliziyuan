@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <el-tree :data="list">
+      <template v-solt="{data}"><div>{{data.name}}---{{data.manager}}</div></template>
+    </el-tree>
+  </div>
+</body>
+<script>
+  Vue.component('el-tree', {
+    props:['data'],
+    data(){
+      return {
+      }
+    },
+    template: `
+      <div>
+        子组件
+        <slot v-for='item in data' :data='item'></slot>
+      </div>
+    `
+  })
+  new Vue({
+    data() {
+      return {
+        list: [
+          { name: '董事会', manager: '曹丕' },
+          { name: '行政部', manager: '刘备' },
+          { name: '人事部', manager: '孙权' }
+        ]
+      }
+    },
+    methods: {
+    },
+    el: '#app'
+  })
+</script>
+</html>

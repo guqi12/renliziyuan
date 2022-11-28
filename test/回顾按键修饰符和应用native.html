@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 在原生的dom上面使用修饰符 -->
+    <!-- <input @keyup.enter="onKeyup"></input> -->
+    <!-- <input @keyup.13="onKeyup"></input> -->
+    <!-- 监听子组件事件方式1-通过父子通信 -->
+    <!-- 不可以,注意:enter按键修饰符,只能用于dom原生事件(冒泡) -->
+    <!-- <el-input @keyup.enter="onKeyup"></el-input> -->
+    <!-- 监听子组件事件方式2-通过事件冒泡 -->
+    <el-input @keyup.enter.native="onKeyup"></el-input>
+
+  </div>
+</body>
+<script>
+  // @keyup="$emit('keyup')"
+  Vue.component('el-input',{
+    template: `
+      <div>
+        <input >
+      </div>
+    `
+  })
+  new Vue({
+    //局部组件
+    components: {},
+    data() {
+      return {
+        msg: 'hello vue'
+      }
+    },
+    methods: {
+      onKeyup(e){
+        console.log('按下按键',e)
+        /*
+        if(e.keyCode===13){
+          console.log('按下回车')
+        }
+        */
+        // console.log('按下回车')
+      }
+    },
+    el: '#app'
+  })
+</script>
+</html>

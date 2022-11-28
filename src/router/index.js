@@ -30,6 +30,8 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
+// 静态路由  所有人的菜单
 export const constantRoutes = [
   {
     path: '/login',
@@ -38,7 +40,7 @@ export const constantRoutes = [
   },
   {
     path: '/learnForm',
-    component: () => import('@/views/learn-Form/index.vue'),
+    component: () => import('../views/learn-Form/index copy.vue'),
     hidden: true
   },
   {
@@ -51,21 +53,38 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+
+    // hidden:true,
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
+// 动态路由  根据用户角色过滤不同的菜单
+import Approvals from './modules/approvals'
+import Attendances from './modules/attendances'
+import Departments from './modules/departments'
+import Employees from './modules/employees'
+import Permission from './modules/permission'
+import Salarys from './modules/salarys'
+import Setting from './modules/setting'
+import Social from './modules/social'
+
+export const asyncRouter = [
+  Employees, Approvals, Attendances, Departments, Permission, Salarys, Setting, Social
+]
+// asyncRouter.push(asyncRouter)
+
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: [...constantRoutes, ...asyncRouter]
 })
 
 const router = createRouter()

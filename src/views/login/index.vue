@@ -3,25 +3,26 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title"><img src="../../assets/common/login-logo.png" alt=""></h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="mobile" class="input">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          ref="mobile"
+          v-model="loginForm.mobile"
+
+          placeholder="Mobile"
+          name="mobile"
           type="text"
           tabindex="1"
           auto-complete="on"
         />
       </el-form-item>
 
-      <el-form-item prop="password">
+      <el-form-item prop="password" class="input">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
@@ -41,10 +42,12 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
+        <span @click="loading = !loading">{{ loading ? '登陆中。。':'登陆' }}</span>
+      </el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
+        <span style="margin-right:20px;">mobile: admin</span>
         <span> password: any</span>
       </div>
 
@@ -53,33 +56,38 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-
+// import { myLoginApi } from '../../api/index.js'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    //   if (!validUsername(value)) {
+    //     callback(new Error('Please enter the correct user name'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
+    // const validatePassword = (rule, value, callback) => {
+    //   if (value.length < 6) {
+    //     callback(new Error('The password can not be less than 6 digits'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        mobile: '13800000002',
+        password: '123456'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        mobile: [
+          { required: true, trigger: 'blur', message: '手机号必填' },
+          { pattern: /^1[3-9]\d{9}$/, trigger: 'blur', message: '手机号不正确' }
+        ],
+        password: [
+          { required: true, trigger: 'blur', message: '密码必填' },
+          { min: 6, max: 16, trigger: 'blur', message: '密码为6到16位' }
+        ]
       },
       loading: false,
       passwordType: 'password',
@@ -105,24 +113,25 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+    async handleLogin() {
+      try {
+        await this.$refs.loginForm.validate()
+        this.loading = true
+        // 发请求
+        // const token = await myLoginApi(this.loginForm)
+        await this.$store.dispatch('user/login', this.loginForm)
+        this.loading = false
+        // 跳转首页
+        this.$router.push('/')
+        // console.log(token)
+      } catch (error) {
+        console.log(error)
+        console.log('校验失败')
+      }
     }
   }
 }
+
 </script>
 
 <style lang="scss">
@@ -130,8 +139,8 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
+$light_gray:#68b0fe;
+$cursor: #68b0fe;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
@@ -157,7 +166,7 @@ $cursor: #fff;
       caret-color: $cursor;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
+        box-shadow: 0 0 0px 1000px #D3E4FF inset !important;
         -webkit-text-fill-color: $cursor !important;
       }
     }
@@ -180,7 +189,7 @@ $light_gray:#eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-image: url('../../assets/common/login.jpg');
   overflow: hidden;
 
   .login-form {
@@ -190,6 +199,12 @@ $light_gray:#eee;
     padding: 160px 35px 0;
     margin: 0 auto;
     overflow: hidden;
+  }
+  .input{
+    border: 0px;
+    color: #68b0fe;
+    background-color: #d2e4ff;
+    outline:none
   }
 
   .tips {

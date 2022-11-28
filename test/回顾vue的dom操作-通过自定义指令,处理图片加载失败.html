@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- v-xxx="变量/表达式" -->
+    <img :src="imgPath" v-imgerror="defaultImgPath">
+    <img :src="imgPath" v-imgerror="'https://v2.cn.vuejs.org/images/logo.svg'">
+  </div>
+</body>
+<script>
+  // 什么是指令
+  //  v-xxx开头的自定义属性,例如v-if,v-show...
+  // 什么是自定义指令
+  //  自己定义v-xxx开头的自定义属性
+  // 文档:https://v2.cn.vuejs.org/v2/guide/custom-directive.html
+  Vue.directive('imgerror',{
+    inserted(el,binding){
+      console.log('src', '111'+el.src+'111', typeof el.src, )
+      if(!el.src){
+        el.src = binding.value
+      }
+      el.onerror = function(){
+        this.src = binding.value
+      }
+    },
+    update(el,binding){
+      if(!el.src){
+        el.src = binding.value
+      }
+    }
+  })
+  new Vue({
+    data() {
+      return {
+        imgPath: undefined,
+        defaultImgPath: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg'
+      }
+    },
+    mounted() {
+      setTimeout(() => {
+        //情况1-服务器返回一个失效图片,可以
+        // this.imgPath = 'http://localhost:8080/undefined'
+        //情况2-服务器返回一个无效数据
+        // this.imgPath = undefined
+        this.imgPath = null //图片路径设置为null,不会触发onerror
+      }, 1000)
+    },
+    methods: {
+    },
+    el: '#app'
+  })
+</script>
+</html>

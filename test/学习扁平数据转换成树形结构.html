@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+// let depts = [
+//   {id: 1, name: '节点1', pid: ''},
+//   {id: 11, name: '节点1-1', pid: 1},
+//   {id: 111, name: '节点1-1-1', pid: 11},
+//   {id: 12, name: '节点1-2', pid: 1},
+//   {id: 2, name: '节点2', pid: ''},
+//   {id: 21, name: '节点2-1', pid: 2},
+// ]
+let depts = [
+  {id: 1, name: '节点1', pid: ''},
+  {id: 11, name: '节点1-1', pid: 1},
+  {id: 111, name: '节点1-1-1', pid: 11},
+]
+/*
+目标数据
+关注目标,把第一级元素放到最外层,分别把孩子放到父节点的children里面
+let list = [
+   {id: 1, name: '节点1', pid: '', children:[
+      {id: 11, name: '节点1-1', pid: 1,children: [
+        {id: 111, name: '节点1-1-1', pid: 11},
+      ]},
+      {id: 12, name: '节点1-2', pid: 1},
+   ]},
+   {id: 2, name: '节点2', pid: '',children: [
+    {id: 21, name: '节点2-1', pid: 2},
+   ]},
+]
+*/
+//关注数据处理
+//给每一个节点(循环,forEach)找当前节点的孩子(找到,filter)
+//最外层是pid为''的数据(filter)
+
+// depts.forEach(t =>{
+//   let children = depts.filter(m => m.pid === t.id)
+//   if(children.length>0){
+//     t.children = children
+//   }
+// })
+// let list = depts.filter(t => t.pid === '')
+// console.log(list);
+
+function translatelisttotree(list,pid){
+  let arr = list.filter(m => m.pid === pid)
+  list.forEach(t =>{
+    if(t.pid === pid){
+      let children = translatelisttotree(list,t.id)
+      if(children.length>0){
+        t.children = children
+      }
+    }
+  })
+  return arr
+}
+ let list = translatelisttotree(depts,'')
+console.log(list);
+</script>
+</html>

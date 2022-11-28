@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+// JSON.parse('{"username": "zs"}')
+//try-catch告诉浏览器我们自己处理错误
+
+try {
+  //产生错误方式1-语法错误
+  // JSON.parse('{username: "zs"}')
+  //产生错误方式2-抛出错误
+  // throw new Error('发生了错误')
+  //产生错误方式3-通过promise
+  /*
+  new Promise((resolve,reject)=>{
+    reject()
+  })
+  */
+  Promise.reject()
+} catch (error) {
+  console.log(error)
+}
+console.log(1)
+</script>
+</html>

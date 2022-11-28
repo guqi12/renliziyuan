@@ -1,14 +1,25 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
+    <QrcodeVue :value="value" :size="size" level="H"> </QrcodeVue>
   </div>
 </template>
 
 <script>
+import QrcodeVue from 'qrcode.vue'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'Dashboard',
+  components: {
+    QrcodeVue
+  },
+  data() {
+    return {
+      value: 'https ://example. com',
+      size: 100
+    }
+  },
   computed: {
     ...mapGetters([
       'name'

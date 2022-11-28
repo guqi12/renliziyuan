@@ -36,7 +36,16 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    // 解决跨越
+    proxy: {
+      // 拦截路径，相对路径
+      '/api': {
+        // 目标路径，不要加/api，因为自动为我们加/api
+        target: 'http://ihrm-java.itheima.net',
+        changeOrigin: true
+      }
+    }
+    // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
