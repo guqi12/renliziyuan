@@ -35,6 +35,7 @@ const actions = {
     const m = await getUserBaseInfo()
     const n = await getEmployeeBaseInfo(m.userId)
     context.commit('setUserInfo', { ...m, ...n })
+    return { ...m, ...n }
   }
 }
 export default {

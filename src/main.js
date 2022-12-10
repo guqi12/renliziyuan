@@ -4,14 +4,17 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+// import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
 import '../directive/index'
 import App from './App.vue'
 import store from './store/index.js'
 import router from './router/index.js'
+import Print from 'vue-print-nb'
+import './utils/mock'
 
+import './mixinx/index'
 import '@/icons/index' // icon
 import '@/permission.js' // permission control
 import './components/index' // 引入注册公共组件文件简单方式
@@ -48,12 +51,20 @@ Vue.use(Ui) // 使用
 // }
 
 // set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
+// Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
-// Vue.use(ElementUI)
+Vue.use(ElementUI)
 
+// Vue.prototype.hasPerm = function(key) {
+
+// }
+// Global instruction
+Vue.use(Print)
 Vue.config.productionTip = false
 
+// const dayjs = window.dayjs
+import dayjs from 'dayjs'
+console.log(dayjs().format('YYYY-MM-DD'))
 new Vue({
   el: '#app',
   router,

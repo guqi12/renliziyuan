@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 完整写法 -->
+    <!-- <input v-on:input="onInput"></input> -->
+    <!-- 简化写法 -->
+    <!-- <input @input="onInput"></input> -->
+    <!-- 绑定多个事件 -->
+    <!-- <input @input="onInput" @keyup="onKeyup"></input> -->
+    <!-- 批量绑定事件 -->
+    <input v-on="obj"></input>
+  </div>
+</body>
+<script>
+  new Vue({
+    data() {
+      return {
+        obj: {
+          input(){
+            console.log('输入内容')
+          },
+          keyup(){
+            console.log('键盘抬起')
+          }
+        },
+      }
+    },
+    methods: {
+
+      onInput(){
+        console.log('输入内容')
+      },
+      onKeyup(){
+        console.log('键盘抬起')
+      }
+    },
+    el: '#app'
+  })
+</script>
+</html>

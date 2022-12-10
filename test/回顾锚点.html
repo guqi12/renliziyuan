@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    div {
+        width: 300px;
+        height: 200px;
+    }
+    #div1 { background-color: red;}
+    #div2 { background-color: pink;}
+    #div3 {background-color: blue;}
+    #div4 {background-color: yellow;}
+    #div5 {background-color: green;}
+</style>
+<body>
+    <!-- 网页地址 -->
+    <!-- 锚点地址栏#xxx,用来定位页面位置 -->
+    <!-- http://localhost:8080/index.html#div1?username=zs -->
+    <a href="#div5">链接</a>
+    <div id="div1"></div>
+    <div id="div2"></div>
+    <div id="div3"></div>
+    <div id="div4"></div>
+    <div id="div5"></div>
+</body>
+<script>
+    //当锚点发送改变触发事件,值是在location.hash这里,并且浏览器不会跳转,不会刷新页面
+    //被vue-router用来监听页面路由,切换页面
+    window.onhashchange = function(){
+        console.log('onhashchange',location.hash)
+    }
+</script>
+</html>

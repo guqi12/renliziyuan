@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+//Array.from
+//文档:https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/from
+// Array.from() 方法对一个类似数组或可迭代对象创建一个新的，浅拷贝的数组实例。
+//(1) 类数组/伪数组
+//  可以通过索引值访问,还有length属性的对象就是伪数组
+/*
+let a = {0: 1, 1: 2, length: 2}
+console.log(a[0], a[1], a.length)
+*/
+
+//(2)产生数组的方式
+// 方式1-通过字面量
+// let a = [1,2,3]
+// 方式2-通过new Array
+/*
+let a = new Array(1,2,3)
+console.log(a)
+*/
+//不可以迭代的,有缺陷数组
+/*
+let a = new Array(3)
+// console.log(a)
+a.forEach(t=>{
+    console.log(t)
+})
+*/
+// Array.from把伪数组和有缺陷数组变成真数组
+/*
+// let a = Array.from({length: 11})
+let a = Array.from(new Array(11))
+console.log(a)
+a.forEach(t=>{
+    console.log(t)
+})
+*/
+
+// 简化版
+/*
+let a = [0,1,2,3,4,5,6,7,8,9,10]
+let currentYear = (new Date()).getFullYear()
+let yearList = a.map(t=>{
+    return currentYear + t - 5
+})
+console.log(yearList)
+*/
+// 优化1-通过newArray和Array.from来产生长度为多少数组
+/*
+let a = Array.from(new Array(11)) //[undefined...]
+let currentYear = (new Date()).getFullYear()
+let yearList = a.map((t,i)=>{
+    return currentYear + i - 5
+})
+console.log(yearList)
+*/
+// 优化2-链式调用,箭头函数简写
+/*
+let currentYear = (new Date()).getFullYear()
+let yearList = Array.from(new Array(11)).map((t,i)=> currentYear + i - 5)
+console.log(yearList)
+*/
+// 优化3-通过Array.from自带的map方法
+let currentYear = (new Date()).getFullYear()
+let yearList = Array.from(new Array(11), (t,i)=> currentYear + i - 5)
+console.log(yearList)
+</script>
+</html>

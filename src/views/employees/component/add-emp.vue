@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog v-bind="$attrs" title="Dialog Titile" v-on="$listeners" @open="onOpen" @close="onClose">
+    <el-dialog :visible="showDialog" v-bind="$attrs" title="新增员工" v-on="$listeners" @open="onOpen" @close="close">
       <el-form ref="formRef" :model="form" :rules="rules" size="medium" label-width="120px">
         <el-form-item label="姓名" prop="username">
           <el-input v-model="form.username" placeholder="请输入单行文本姓名" clearable :style="{width: '100%'}">
@@ -27,10 +27,10 @@
             :style="{width: '100%'}"
           >
             <el-option
-              v-for="(item, index) in formOfEmploymentOptions"
+              v-for="(item, index) in EmployeesEnum.hireType"
               :key="index"
-              :label="item.label"
-              :value="item.value"
+              :label="item.value"
+              :value="item.id"
               :disabled="item.disabled"
             ></el-option>
           </el-select>
@@ -40,8 +40,15 @@
           </el-input>
         </el-form-item>
         <el-form-item label="部门" prop="departmentName">
-          <el-input v-model="form.departmentName" placeholder="请输入部门" clearable :style="{width: '100%'}">
+          <el-input v-model="form.departmentName" placeholder="请输入部门" clearable :style="{width: '100%'}" @focus="getDepartments">
           </el-input>
+          <el-tree
+            v-if="showTree"
+            :data="list"
+            :props="{label:'name'}"
+            default-expand-all
+            @node-click="onNodeClick"
+          ></el-tree>
         </el-form-item>
         <el-form-item label="转正时间" prop="correctionTime">
           <el-date-picker
@@ -54,20 +61,31 @@
           ></el-date-picker>
         </el-form-item>
       </el-form>
-      <div slot="footer">
+      <el-row slot="footer" type="flex" justify="center">
         <el-button @click="close">取消</el-button>
         <el-button type="primary" @click="handelConfirm">确定</el-button>
-      </div>
+      </el-row>
     </el-dialog>
   </div>
 </template>
 <script>
+import { getDeparments } from '../../../api/department.js'
+import EmployeesEnum from '../../../constant/employees.js'
+import { translatelisttotree } from '../../../utils'
+import { addEmployee } from '../../../api/employees'
 export default {
   components: {},
   inheritAttrs: false,
-  props: [],
+  props: {
+    showDialog: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
+      EmployeesEnum,
+      showTree: false,
       form: {
         username: undefined,
         mobile: undefined,
@@ -77,6 +95,7 @@ export default {
         departmentName: undefined,
         correctionTime: null
       },
+      list: [],
       rules: {
         username: [{
           required: true,
@@ -106,7 +125,7 @@ export default {
         departmentName: [{
           required: true,
           message: '请输入部门',
-          trigger: 'blur'
+          trigger: 'change'
         }],
         correctionTime: []
       },
@@ -125,17 +144,27 @@ export default {
   mounted() {},
   methods: {
     onOpen() {},
-    onClose() {
-      this.$refs['formRef'].resetFields()
-    },
     close() {
-      this.$emit('update:visible', false)
+      this.$refs['formRef'].resetFields()
+      this.$emit('update:showDialog', false)
     },
     handelConfirm() {
-      this.$refs['formRef'].validate(valid => {
+      this.$refs['formRef'].validate(async valid => {
         if (!valid) return
+        await addEmployee(this.form)
+        this.$message.success('操作成功')
+        this.$emit('success')
         this.close()
       })
+    },
+    onNodeClick(data) {
+      this.form.departmentName = data.name
+      this.showTree = false
+    },
+    async getDepartments() {
+      const { depts } = await getDeparments()
+      this.list = translatelisttotree(depts, '')
+      this.showTree = true
     }
   }
 }

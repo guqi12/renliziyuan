@@ -1,14 +1,37 @@
-import Layout from '@/layout/index.vue'
-export default {
+
+import Layout from '@/layout'
+
+const attendRouter = {
   path: '/attendances',
   component: Layout,
+  name: 'attendances',
   children: [
     {
-      // 默认路由,空字符串
       path: '',
+      component: () => import('@/views/attendances'),
       name: 'attendances',
-      component: () => import('@/views/attendances/index.vue'),
-      meta: { title: '考勤', icon: 'skill' }
+      meta: {
+        title: '考勤',
+        icon: 'excel' }
+    },
+    {
+      path: 'archiving',
+      component: () => import('@/views/attendances/historical'),
+      name: 'archiving',
+      hidden: true,
+      meta: {
+        title: '归档'
+      }
+    },
+    {
+      path: 'report/:month',
+      component: () => import('@/views/attendances/report'),
+      name: 'reports',
+      hidden: true,
+      meta: {
+        title: '报表'
+      }
     }
   ]
 }
+export default attendRouter

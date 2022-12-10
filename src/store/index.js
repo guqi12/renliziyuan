@@ -4,14 +4,15 @@ import getters from './getters' // 引入getter模板
 import app from './modules/app' // 引入app模板
 import settings from './modules/settings' // 引入settings模板
 import user from './modules/user' // 引入user模板
-
+import permission from './modules/permission'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
     app,
     settings,
-    user
+    user,
+    permission
   },
   getters
 })

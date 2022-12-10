@@ -2,7 +2,7 @@
   <el-card class="page-tools">
     <el-row type="flex">
       <el-col>
-        <div class="before">
+        <div v-if="$slots.before" class="before">
           <i class="el-icon-info" />
           <slot name="before" class="text"></slot>
         </div>
@@ -27,7 +27,9 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    console.log('slots', this.$slots)
+  },
   methods: {
 
   }

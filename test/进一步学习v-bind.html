@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.14/vue.js" type="application/javascript"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 完整写法 -->
+    <!-- <input v-bind:value="username"></input> -->
+    <!-- 简化写法 -->
+    <!-- <input :value="username"></input> -->
+    <!-- 绑定多个属性 -->
+    <!-- <input :value="username" :disabled="isDisabled"></input> -->
+    <!-- 批量绑定属性 -->
+    <input v-bind="obj"></input>
+    <!-- 不可以 -->
+    <!-- <input :="obj"></input> -->
+  </div>
+</body>
+<script>
+  new Vue({
+    data() {
+      return {
+        username: 'zs',
+        isDisabled: true,
+        obj: {
+          value: 'zs',
+          disabled: true,
+        }
+      }
+    },
+    el: '#app'
+  })
+</script>
+</html>

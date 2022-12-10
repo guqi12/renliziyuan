@@ -33,7 +33,7 @@
               prop="Operation"
             >
               <template v-slot="{row}">
-                <el-button type="success" size="small">分配权限</el-button>
+                <el-button type="success" size="small" @click="onShowAssignPermDialog(row.id)">分配权限</el-button>
                 <el-button type="primary" size="small" @click="onupdate(row.id)">编辑</el-button>
                 <el-button type="danger" size="small" @click="onDel(row.id)">删除</el-button>
               </template>
@@ -91,18 +91,42 @@
         <el-button type="primary" @click="handelConfirm">确定</el-button>
       </div>
     </el-dialog>
+    <!-- 模块 -->
+    <el-dialog
+      title="分配权限"
+      :visible.sync="showAssignPermDialog"
+      width="50%"
+    >
+      <el-tree
+        ref="treeRef"
+        node-key="id"
+        :data="permList"
+        :props="{label:'name'}"
+        show-checkbox
+        default-expand-all
+        check-strictly
+      ></el-tree>
+      <el-row slot="footer" type="flex" justify="center">
+        <el-button size="small" @click="showAssignPermDialog = false">取消</el-button>
+        <el-button type="primary" size="small" @click="assignPerm">确定</el-button>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getCompanyById, getRoles, addRole, deleteRole, getRoleDetail, updateRole } from '../../api/setting.js'
+import { getCompanyById, getRoles, addRole, deleteRole, getRoleDetail, updateRole, assignPerm } from '../../api/setting.js'
+import { translatelisttotree } from '../../utils'
+import { getPermissionList } from '../../api/Permission'
 export default {
   name: 'SettingPage',
   components: {},
   props: {},
   data() {
     return {
+      currentId: undefined,
       showDialog: false,
+      showAssignPermDialog: false,
       formData: {
         name: undefined,
         description: undefined
@@ -118,6 +142,7 @@ export default {
       activeName: 'first',
       form: {},
       list: [],
+      permList: [],
       page: {
         page: 1,
         pagesize: 10,
@@ -131,6 +156,26 @@ export default {
   },
   mounted() {},
   methods: {
+    async onShowAssignPermDialog(id) {
+      this.currentId = id
+      // 获取权限树
+      this.permList = translatelisttotree(await getPermissionList(), '0')
+      console.log(this.permList)
+      this.showAssignPermDialog = true
+      const { permIds } = await getRoleDetail(id)
+      // await this.$nextTick()   解决异步问题
+      this.$refs.treeRef.setCheckedKeys(permIds)
+    },
+    async assignPerm() {
+      const permIds = this.$refs.treeRef.getCheckedKeys()
+      console.log(permIds)
+      await assignPerm({
+        id: this.currentId,
+        permIds
+      })
+      this.$message.success('操作成功')
+      this.showAssignPermDialog = false
+    },
     onAdd() {
       this.showDialog = true
     },

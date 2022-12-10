@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/lodash.js/4.17.21/lodash.min.js" type="application/javascript"></script>
+  <script>
+    //原始数据,对象数组
+    let rows = [
+      {
+        id: "1063705989926227968",
+        mobile: "13800000002",
+        username: "管理员",
+        password: "c8b7722b1139bb9b346409e503302e82",
+        enableState: 1,
+        createTime: "2018-11-17T16:10:45.000+0000",
+        companyId: "1",
+        companyName: "传智播客",
+        departmentId: "1175310929766055936",
+        timeOfEntry: "2018-11-02T08:00:00.000+0000",
+        formOfEmployment: 3,
+        workNumber: "0001",
+        formOfManagement: null,
+        workingCity: null,
+        correctionTime: "2018-11-30T00:00:00.000+0000",
+        inServiceStatus: 1,
+        departmentName: "总裁办",
+        level: "coAdmin",
+        staffPhoto:
+          "https://autumnfish.cn/api/form/static/test/avatar-1669777134637.png",
+      },
+    ];
+    //目标数据
+    //表头
+    // let headers = ['姓名', '手机号','入职日期','聘用形式','转正日期','工号','部门']
+    //数据-二维数组
+    // let data = [["管理员","13800000002","2018-11-02T08:00:00.000+0000",...]]
+
+    //表头
+    // let headers = ['姓名', '手机号','入职日期','聘用形式','转正日期','工号','部门']
+    // 表头对应关系
+    const headers = {
+        '姓名': 'username',
+        '手机号': 'mobile',
+        '入职日期': 'timeOfEntry',
+        '聘用形式': 'formOfEmployment',
+        '转正日期': 'correctionTime',
+        '工号': 'workNumber',
+        '部门': 'departmentName'
+    }
+    console.log(Object.keys(headers))
+    console.log(_.pick(rows[0],Object.values(headers)));
+    let data = rows.map(t => {
+      let item = _.pick(t,Object.values(headers))
+      return Object.values(item)
+    })
+    console.log(data);
+  </script>
+</html>

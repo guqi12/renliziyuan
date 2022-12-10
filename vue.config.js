@@ -38,12 +38,28 @@ module.exports = {
     },
     // 解决跨越
     proxy: {
-      // 拦截路径，相对路径
+      // 拦截路径,相对路径
+      // 传智项目库地址
+
+      // '/api': {
+      //   // 目标路径,不要加/api,因为自动为我们加/api
+      //   target: 'http://ihrm-java.itheima.net',
+      //   changeOrigin: true // 是否跨域 需要设置此值为true 才可以让本地服务代理我们发出请求
+      // }
+
+      // 课程设计者地址
       '/api': {
-        // 目标路径，不要加/api，因为自动为我们加/api
-        target: 'http://ihrm-java.itheima.net',
-        changeOrigin: true
+        // 目标路径,不要加/api,因为自动为我们加/api
+        target: 'http://ihrm.itheima.net',
+        changeOrigin: true, // 是否跨域 需要设置此值为true 才可以让本地服务代理我们发出请求
+        pathRewrite: { '^/api': '/prod-api' }
       }
+      // 老师本地服务器
+      // '/api': {
+      //   // 目标路径,不要加/api,因为自动为我们加/api
+      //   target: 'http://192.168.11.183:3000',
+      //   changeOrigin: true // 是否跨域 需要设置此值为true 才可以让本地服务代理我们发出请求
+      // }
     }
     // before: require('./mock/mock-server.js')
   },
@@ -55,7 +71,17 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
+    externals: process.env.NODE_ENV === 'production' ? {
+      // 左边:import 'yyy'
+      // 右边:window上面xxx
+      // 含义:告诉webpack通过import 'yyy'的内容,从window.xxx上去去
+      dayjs: 'window.dayjs',
+      xlsx: 'XLSX',
+      mockjs: 'Mock',
+      vue: 'Vue',
+      'element-ui': 'ELEMENT'
+    } : {}
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload

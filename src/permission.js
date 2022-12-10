@@ -1,5 +1,5 @@
 // 通过路由的守卫来控制页面跳转
-import router from './router/index.js'
+import router, { constantRoutes } from './router/index.js'
 import store from './store/index'
 // 前置守卫，每一次跳转前
 router.beforeEach(async(to, from, next) => {
@@ -18,6 +18,32 @@ router.beforeEach(async(to, from, next) => {
     // if (store.state.user.userInfo === undefined) {
     if (!store.state.user.userInfo.id) {
       await store.dispatch('user/getInfo')
+      /*
+      const menus = store.state.user.userInfo.roles.menus
+      const filterRoutes = asyncRouter.filter(t => menus.includes(t.children[0].name))
+      console.log(filterRoutes, 'filterRoutes')
+      //  添加路由，通过路由api方法添加
+      // 注意，addRoutes不会影响路由原始配置
+      router.addRoutes([...filterRoutes, { path: '*', redirect: '/404', hidden: true }])
+      // 解决菜单没有显示
+      router.options.routes = [...constantRoutes, ...filterRoutes]
+      // 解决刷新报404的问题
+      // 重新跳转一次
+      next(to.path)
+       */
+      const { roles: { menus }} = await store.dispatch('user/getInfo')
+      // 完成表单权限，方式2-标准模式(用vuex)
+      // 获取menus数据，准备做菜单过滤
+      // const menus = store.state.user.userInfo.roles.menus
+      const filterRoutes = await store.dispatch('permission/filterRoutes', menus)
+      //  添加路由，通过路由api方法添加
+      // 注意，addRoutes不会影响路由原始配置
+      router.addRoutes([...filterRoutes, { path: '*', redirect: '/404', hidden: true }])
+      // 解决菜单没有显示
+      router.options.routes = [...constantRoutes, ...filterRoutes]
+      // 解决刷新报404的问题
+      // 重新跳转一次
+      next(to.path)
     }
     next()
   } else {

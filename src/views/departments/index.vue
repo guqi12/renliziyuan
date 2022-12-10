@@ -7,14 +7,14 @@
            <el-col :span="1">右</el-col>
          </el-row> -->
         <TreeNode :data="companyInfo">
-          <el-dropdown-item @click.native="onAdd(companyInfo)">
+          <el-dropdown-item :disabled="!hasPerm('add-dept')" @click.native="onAdd(companyInfo)">
             添加子部门
           </el-dropdown-item>
         </TreeNode>
         <el-tree :data="list" :props="{label:'name'}" default-expand-all>
           <template v-slot="{data}">
             <TreeNode :data="data">
-              <el-dropdown-item @click.native="onAdd(data)">添加子部门</el-dropdown-item>
+              <el-dropdown-item :disabled="!hasPerm('add-dept')" @click.native="onAdd(data)">添加子部门</el-dropdown-item>
               <el-dropdown-item @click.native="onUpdate(data.id)">编辑部门</el-dropdown-item>
               <el-dropdown-item @click.native="onDel(data.id)">删除部门</el-dropdown-item>
             </TreeNode>
@@ -54,6 +54,7 @@ export default {
     this.getDeparments()
   },
   methods: {
+
     async getDeparments() {
       try {
         const { depts } = await getDeparments()

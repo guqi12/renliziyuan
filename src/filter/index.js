@@ -6,10 +6,10 @@ import dayjs from 'dayjs'
 // })
 
 // 定义过滤器方式二  完整写法
-export function formatTime(val) {
-  return dayjs(val).format('YYYY-MM-DD')
+export function formatTime(val, format = 'YYYY-MM-DD') {
+  return dayjs(val).format(format)
 }
-
+export const formatDate = formatTime
 import EmployeesEnum from '../constant/employees'
 export function formatHireType(val) {
   const f = EmployeesEnum.hireType.find(t => t.id === val)

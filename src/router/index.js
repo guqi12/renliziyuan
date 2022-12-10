@@ -44,6 +44,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/learn-scoped',
+    component: () => import('../views/learnScopen/index.vue'),
+    hidden: true
+  },
+  {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
@@ -60,10 +65,16 @@ export const constantRoutes = [
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
+    },
+    {
+      path: 'import',
+      name: 'import',
+      hidden: true,
+      component: () => import('../import/index.vue')
     }]
-  },
+  }
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 // 动态路由  根据用户角色过滤不同的菜单
@@ -82,9 +93,11 @@ export const asyncRouter = [
 // asyncRouter.push(asyncRouter)
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: [...constantRoutes, ...asyncRouter]
+  // routes: [...constantRoutes, ...asyncRouter]
+  // 把动态路由和静态路由分离
+  routes: [...constantRoutes]
 })
 
 const router = createRouter()
